@@ -1,0 +1,6 @@
+{
+    "db":{
+        "conn_str":"mongodb_conn_str"
+    },
+    "jwtPrivateKey":"jwtPrivateKey"
+}
