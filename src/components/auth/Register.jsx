@@ -10,16 +10,35 @@ class Register extends Component{
 
     saveUser=(event)=>{
         event.preventDefault();
-        this.props.registerUser(serializeForm(event.target,{hash:true}));
-        this.setState({valid:true},()=>{
-            this.props.history.push('/login'); 
-        })
+        this.props.registerUser(serializeForm(event.target,{hash:true}), this.props.history);
+        // this.setState({valid:true},()=>{
+        //     this.props.history.push('/login'); 
+        // })
        
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+          this.setState({ errors: nextProps.errors },()=>{console.log(this.props)});
+            
+        }
+      }
+
+    componentDidMount() {
+        console.log(this.props);
+        // if (this.props.auth.isLoggedIn) {
+        //   this.props.history.push('/dashboard');
+        // }
+      }
 
     render(){
 
         const elem = <div>
+            { this.props.errors.details ? this.props.errors.details.map((error,index)=>{
+                return <div className="alert alert-danger" key={index}>
+                {error.message}
+              </div>
+            }):null}
         {/* <Prompt when={!this.state.valid} message="Navigating will loose your data!"/> */}
          <form id="app" onSubmit={this.saveUser}>
              <div className="form-group">
@@ -42,8 +61,10 @@ class Register extends Component{
 }
 
 
-function mapStateToProps(){
+function mapStateToProps(state){
     return {
+        auth:state.authReducer,
+        errors: state.errors
 
     }
 }
